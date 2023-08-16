@@ -27,7 +27,7 @@ function Detail(props) {
     let itemFind = props.shoes.find((x) => x.id == id );
     
     let [count, setCount] = useState(0);
-    let [alert, setAlert] = useState(true)
+    let [comment, setComment] = useState(true)
 
     useEffect( ()=> {
         // html이 전부 로드 된 후 실행됨   
@@ -35,7 +35,7 @@ function Detail(props) {
         // - 서버에서 데이터 가져오는 작업
         // - 타이머 장착하는거
         let a = setTimeout(() => {
-            setAlert(false)
+            setComment(false)
         }, 2000);
         console.log(1)
         return ()=> {
@@ -63,24 +63,35 @@ function Detail(props) {
 
     console.log('rer')
 
+    let [num, setNum] = useState('')
+
+
+    useEffect(()=> {
+        if (isNaN(num) == true) {
+            alert('안돼')
+            setNum('')
+        }
+    }, [num])
+
     return(
         <>
             <div className="container">    
                 {
-                    alert == true ? 
-                    <div className="alert">2초 이내 구매시 할인</div> : null
+                    comment == true ? 
+                    <div className="comment">2초 이내 구매시 할인</div> : null
                 } 
-                <YellowBtn onClick={()=> {setCount(count + 1); setAlert(true) }} bg="blue">버튼</YellowBtn>
+                <input onChange={(e)=> {setNum(e.target.value)}} />
+                <YellowBtn onClick={()=> {setCount(count + 1); setComment(true) }} bg="blue">버튼</YellowBtn>
                 <div className="row">
-                <div className="col-md-6">
-                    <img src={'https://codingapple1.github.io/shop/shoes' + (Number(id) + 1) + '.jpg'} alt="상세사진" style={{width:"60%"}} />
-                </div>
-                <div className="col-md-6">
-                <h4 className="pt-5">{itemFind.title}</h4>
-                <p>{itemFind.content}</p>
-                <p>{itemFind.price}원</p>
-                    <button className="btn btn-danger">주문하기</button> 
-                </div>
+                    <div className="col-md-6">
+                        <img src={'https://codingapple1.github.io/shop/shoes' + (Number(id) + 1) + '.jpg'} alt="상세사진" style={{width:"60%"}} />
+                    </div>
+                    <div className="col-md-6">
+                        <h4 className="pt-5">{itemFind.title}</h4>
+                        <p>{itemFind.content}</p>
+                        <p>{itemFind.price}원</p>
+                        <button className="btn btn-danger">주문하기</button> 
+                    </div>
                 </div>
             </div> 
         </>

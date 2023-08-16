@@ -24,6 +24,9 @@ function App() {
   // navigate(1) 앞으로가기 버튼  
 
 
+  let [버튼횟수, set버튼횟수] = useState(0)
+
+
   return (
     <>
     
@@ -71,28 +74,68 @@ function App() {
                           {
                             shoes.map((a, i)=> {
                               return(
-                                <Item shoes={shoes[i]} i={i} />
+                                <Item shoes={shoes[i]} i={i} key={i} />
                               ); 
                             })
                           }
                       </Row>
                   </Container>
 
-                  <button style={{marginTop:"100px"}} onClick={()=>{ 
+                  {버튼횟수 < 2 ?
 
-                    axios.get('https://codingapple1.github.io/shop/data3.json')
-                      .then((결과)=>{
-                        console.log(결과.data)
-                        console.log(shoes)
+                  <button className='btn_num' style={{marginTop:"30px"}} onClick={()=>{ 
+                    
+                    set버튼횟수(버튼횟수 = 버튼횟수 + 1 )
+                    console.log(버튼횟수)
+                    
+                    console.log('로딩중')
+                    
+                    if (버튼횟수 == 1 ) {
+                          axios.get('https://codingapple1.github.io/shop/data2.json')
+                            .then((결과)=>{
+                              console.log(결과.data)
+                              console.log(shoes)
+      
+                              let copy = [...shoes, ...결과.data];
+                              신발순서변경(copy);
+      
+                              console.log('로딩끝')
+                            })
+                            .catch(()=>{
+                              console.log('실패함ㅅㄱ')
+                            })
+                    } else if (버튼횟수 == 2) {
+                            axios.get('https://codingapple1.github.io/shop/data3.json')
+                            .then((결과)=>{
+                              console.log(결과.data)
+                              console.log(shoes)
 
-                        let copy = [...shoes, ...결과.data];
-                        신발순서변경(copy);
+                              let copy = [...shoes, ...결과.data];
+                              신발순서변경(copy);
 
-                      })
-                      .catch(()=>{
-                        console.log('실패함ㅅㄱ')
-                      })
-                  }}>버튼</button>
+                              console.log('로딩끝')
+                            })
+                            .catch(()=>{
+                              console.log('실패함ㅅㄱ')
+                            })
+                    }
+
+                    // axios.post('/safdfas', {name : 'kim'}) 서버로 보내기
+
+                    // Promise.all( [ axios.get('/url'), axios.get('/url2') ] ) 두개동시에 받기
+                    // .then(()=> {
+
+                    // }) 
+
+                    // 엑시오스를 안쓰고 fetch를 사용한 json파일 가져오기  //json을 array나 객체로 가져오기가 불편함
+                    // fetch('https://codingapple1.github.io/shop/data3.json')
+                    // .then(결과=> 결과.json())
+                    // .then(data=>{})
+                
+                    }}>버튼</button>
+
+                    : null
+                  }
 
               </>
           } />
@@ -166,7 +209,6 @@ function Event(props) {
     </div>
   );
 }
-
 
 
 
