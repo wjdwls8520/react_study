@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Nav } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -28,6 +29,9 @@ function Detail(props) {
     
     let [count, setCount] = useState(0);
     let [comment, setComment] = useState(true)
+
+
+    let [탭, 탭변경] = useState(0)
 
     useEffect( ()=> {
         // html이 전부 로드 된 후 실행됨   
@@ -90,9 +94,29 @@ function Detail(props) {
                         <h4 className="pt-5">{itemFind.title}</h4>
                         <p>{itemFind.content}</p>
                         <p>{itemFind.price}원</p>
-                        <button className="btn btn-danger">주문하기</button> 
+                        <button className="btn btn-danger" >주문하기</button> 
                     </div>
                 </div>
+
+                <Nav variant="tabs"  defaultActiveKey="link0">
+                    <Nav.Item>
+                    <Nav.Link eventKey="link0" onClick={()=> 탭변경(0)}>버튼0</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                    <Nav.Link eventKey="link1" onClick={()=> 탭변경(1)}>버튼1</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                    <Nav.Link eventKey="link2" onClick={()=> 탭변경(2)}>버튼2</Nav.Link>
+                    </Nav.Item>
+                </Nav>
+
+                {
+                    탭 == 0 ? <div>내용0</div> :
+                    탭 == 1 ? <div>내용1</div> :
+                    탭 == 2 ? <div>내용2</div> : null
+                }
+                
+
             </div> 
         </>
     );

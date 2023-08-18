@@ -155,7 +155,7 @@ function App() {
                                 <h4 className="pt-5">{shoes[i].title}</h4>
                                 <p>{shoes[i].content}</p>
                                 <p>{shoes[i].price}원</p>
-                                <button className="btn btn-danger">주문하기</button> 
+                                <button className="btn btn-danger" onClick={()=> {navigate(`/detail/${i}`)}}>주문하기</button> 
                             </div>
                           </div>
                       </div> 
