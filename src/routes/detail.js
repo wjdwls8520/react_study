@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Nav } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+
+import {Context1} from './../App'
 
 
 let YellowBtn = styled.button`
@@ -24,6 +26,9 @@ let YellowBtn = styled.button`
 
 
 function Detail(props) {
+
+    
+
     let { id } = useParams();
     let itemFind = props.shoes.find((x) => x.id == id );
     
@@ -77,9 +82,11 @@ function Detail(props) {
         }
     }, [num])
 
+    let [ative, setAtive] = useState(false)
+
     return(
         <>
-            <div className="container">    
+            <div className={`container detailContainer ${ative == true ? 'active' : null}`} onLoad={()=> {setAtive(true)}}>    
                 {
                     comment == true ? 
                     <div className="comment">2초 이내 구매시 할인</div> : null
@@ -110,16 +117,40 @@ function Detail(props) {
                     </Nav.Item>
                 </Nav>
 
-                {
+                {/* {
                     탭 == 0 ? <div>내용0</div> :
                     탭 == 1 ? <div>내용1</div> :
                     탭 == 2 ? <div>내용2</div> : null
-                }
+                } */}
+                <TabContent 탭={탭} shoes={props.shoes} />
+
                 
 
             </div> 
         </>
     );
+}
+
+let TabContent = ({탭, shoes}) => {
+
+    let {재고} = useContext(Context1)
+
+    let [fade, setFade] = useState('')
+    useEffect(()=> {
+        setTimeout(()=> { setFade('end'); }, 100)
+        
+        return ()=>{
+            clearTimeout();
+            setFade('');
+        }
+    }, [탭])
+
+    return (
+        <div className={`start ${fade} `}>
+            { [<div>{shoes[0].title}</div>, <div>내용2</div>, <div>내용3</div>][탭] }
+            {재고[0]}
+        </div>
+    )
 }
 
 export default Detail;

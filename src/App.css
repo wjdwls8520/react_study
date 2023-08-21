@@ -24,3 +24,13 @@ html body a { text-decoration: none; color: #fff;}
 }
 
 .col img {height: auto;}
+
+
+/* 컨테이너 */
+.detailContainer {opacity: 0;}
+.detailContainer.active {opacity: 1; transition: opacity 0.5s;}
+
+.start {
+  opacity: 0;
+} 
+.end {opacity: 1; transition: opacity 0.5s;}

@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Nav, Navbar, Row } from 'react-bootstrap';
 import bg from './images/main_intro.png';
@@ -12,11 +12,15 @@ import { useNavigate, Outlet } from 'react-router-dom' //Hook (유용한것들�
 import Detail from './routes/detail';
 
 import axios from 'axios';
+import Cart from './routes/Cart';
+
+export let Context1 = createContext();
 
 
 function App() {
 
   let [shoes, 신발순서변경] = useState(data);
+  let [재고] = useState([10, 11, 12]);
 
 
   let navigate = useNavigate();  // Link는 a태그 만들어서 앵커해주고, 이 hook은 그냥 window.locate이라고 보면됨
@@ -40,6 +44,7 @@ function App() {
                   {/* 라우터 링크 파라미터값이 바뀌지 않기 때문에 원페이지가 됨 */}
                   <Link className={'link'} to="/">Home</Link>
                   <Link className={'link'} to="/detail">Detail</Link>
+                  <Link className={'link'} to="/cart">Cart</Link>
               </Nav>
           </Container>
       </Navbar>
@@ -164,7 +169,16 @@ function App() {
               }) 
             
           }/>
-          <Route path="/detail/:id" element={ <Detail shoes={shoes} /> } />
+
+          {/* 디테일 */}
+          <Route path="/detail/:id" element={ 
+            <Context1.Provider value={{ 재고 }}>
+              <Detail shoes={shoes} />
+            </Context1.Provider>
+          } />
+
+          {/* 장바구니 카트 */}
+          <Route path='/cart' element={ <Cart /> } />
 
           <Route path='about' element={<About />}> 
             <Route path='member' element={<div>멤버임</div>} /> 
