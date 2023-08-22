@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import {Context1} from './../App'
+import { addItem } from "../store";
+import { useDispatch, useSelector } from "react-redux";
 
 
 let YellowBtn = styled.button`
@@ -27,16 +29,27 @@ let YellowBtn = styled.button`
 
 function Detail(props) {
 
-    
 
     let { id } = useParams();
     let itemFind = props.shoes.find((x) => x.id == id );
+
+    useEffect(()=> {
+        // 최근본 아이템 id 
+        let getLocalData = localStorage.getItem('watched') //꺼낸거
+        getLocalData = JSON.parse(getLocalData) //꺼낸거 배열로 번역
+        getLocalData.push(itemFind.id) //배열에 push 
+        getLocalData = new Set(getLocalData) // set 자료형 : 알아서 배열에서 중복을 없애줌
+        getLocalData = Array.from(getLocalData)
+        localStorage.setItem('watched', JSON.stringify( getLocalData )) // push 꺼낸거 추가
+    },[])
+
     
     let [count, setCount] = useState(0);
     let [comment, setComment] = useState(true)
 
 
     let [탭, 탭변경] = useState(0)
+
 
     useEffect( ()=> {
         // html이 전부 로드 된 후 실행됨   
@@ -46,9 +59,9 @@ function Detail(props) {
         let a = setTimeout(() => {
             setComment(false)
         }, 2000);
-        console.log(1)
+        // console.log(1)
         return ()=> {
-            console.log(2)
+            // console.log(2)
             clearTimeout(a); // 기존 데이터 요청은 제거해주세요 // 언마운트 될 때 적용됨
         }
     }, [count] );
@@ -69,9 +82,6 @@ function Detail(props) {
     //      }
     // }, [])   
 
-
-    console.log('rer')
-
     let [num, setNum] = useState('')
 
 
@@ -83,6 +93,10 @@ function Detail(props) {
     }, [num])
 
     let [ative, setAtive] = useState(false)
+
+
+    let redux = useSelector((state)=> state.cart); 
+    let dispatch = useDispatch();
 
     return(
         <>
@@ -101,7 +115,7 @@ function Detail(props) {
                         <h4 className="pt-5">{itemFind.title}</h4>
                         <p>{itemFind.content}</p>
                         <p>{itemFind.price}원</p>
-                        <button className="btn btn-danger" >주문하기</button> 
+                        <button className="btn btn-danger" onClick={()=> { dispatch(addItem( {id: itemFind.id, name: itemFind.title, count: 1} )) }}>주문하기</button> 
                     </div>
                 </div>
 

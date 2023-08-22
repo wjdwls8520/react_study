@@ -1,5 +1,5 @@
 import './App.css';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Nav, Navbar, Row } from 'react-bootstrap';
 import bg from './images/main_intro.png';
@@ -13,11 +13,33 @@ import Detail from './routes/detail';
 
 import axios from 'axios';
 import Cart from './routes/Cart';
+import { useQuery } from 'react-query';
+
 
 export let Context1 = createContext();
 
 
 function App() {
+
+  // 로컬스토리지 문자열만 넣을수 있는데 편법 쓰기
+  let obj = {name : 'kim'}
+  // JSON.stringify(obj)
+  localStorage.setItem('data', JSON.stringify(obj))
+  let 꺼낸거 = localStorage.getItem('data');
+  꺼낸거 = JSON.parse(localStorage.getItem('data')).name
+
+  // 빈배열만들어놓기
+  useEffect(()=> {
+
+     
+      if(localStorage.getItem('watched')) {
+
+      } else {
+        localStorage.setItem('watched', JSON.stringify([]))
+      }
+    
+  },[])
+
 
   let [shoes, 신발순서변경] = useState(data);
   let [재고] = useState([10, 11, 12]);
@@ -30,6 +52,21 @@ function App() {
 
   let [버튼횟수, set버튼횟수] = useState(0)
 
+
+
+  // axios.get('https://codingapple1.github.io/userdata.json').then((a)=> {
+  //   console.log(a.data);
+  // })
+  let result = useQuery('자크명', ()=> 
+
+      axios.get('https://codingapple1.github.io/userdata.json').then((a)=> {
+        return a.data
+      })
+  
+  )
+  //  result.isLoading && '로딩중' 
+  //  result.error && '에러남' 
+  //  result.data && result.data.name 
 
   return (
     <>
@@ -46,6 +83,8 @@ function App() {
                   <Link className={'link'} to="/detail">Detail</Link>
                   <Link className={'link'} to="/cart">Cart</Link>
               </Nav>
+              {/* <Nav className='ms-auto' style={{color : '#fff'}}>{ result.isLoading ? '로딩중' : result.data.name }</Nav> */}
+              <Nav className='ms-auto' style={{color : '#fff'}}>{ result.isLoading ? '로딩중' : result.data.name }</Nav>
           </Container>
       </Navbar>
 

@@ -6,17 +6,26 @@ import reportWebVitals from './reportWebVitals';
 
 // npm install react-router-dom@6 한다음
 import { BrowserRouter } from 'react-router-dom';
+// 리덕스
 import { Provider } from 'react-redux';
 import store from './store'
+// 리액트쿼리
+import { QueryClient } from 'react-query'
+import { QueryClientProvider } from '@tanstack/react-query';
+
+// 리액트쿼리추가
+const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     // <React.StrictMode>
-  <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-  </Provider>
+  <QueryClientProvider client={queryClient}>
+      <Provider store={store}> 
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+      </Provider>
+  </QueryClientProvider>
     // </React.StrictMode>
 );
 
