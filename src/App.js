@@ -1,5 +1,5 @@
 import './App.css';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, Suspense, lazy, useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Nav, Navbar, Row } from 'react-bootstrap';
 import bg from './images/main_intro.png';
@@ -8,12 +8,15 @@ import Item from './component/item';
 // 라우터쓸때 외부 라이브러리를 쓰는데 항상 같은걸 쓰는게 아니게 때문 때때로 맞춰서 써야함
 import { Routes, Route, Link } from 'react-router-dom'
 import { useNavigate, Outlet } from 'react-router-dom' //Hook (유용한것들이 들어있는 함수라고 보면 됨)
-
-import Detail from './routes/detail';
-
 import axios from 'axios';
-import Cart from './routes/Cart';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
+
+// import Detail from './routes/detail';
+// import Cart from './routes/Cart';
+const Detail = lazy(()=> import('./routes/detail.js'));
+const Cart = lazy(()=> import('./routes/Cart.js'));
+
+
 
 
 export let Context1 = createContext();
@@ -49,19 +52,16 @@ function App() {
   // navigate(-1) 뒤로가기 버튼  
   // navigate(1) 앞으로가기 버튼  
 
-
   let [버튼횟수, set버튼횟수] = useState(0)
 
 
-
-  // axios.get('https://codingapple1.github.io/userdata.json').then((a)=> {
-  //   console.log(a.data);
-  // })
-  let result = useQuery('자크명', ()=> 
+  let result = useQuery(['자크명'], ()=> 
 
       axios.get('https://codingapple1.github.io/userdata.json').then((a)=> {
+        console.log('요청됨')
         return a.data
-      })
+      }),
+      { stableTime : 2000 }
   
   )
   //  result.isLoading && '로딩중' 
@@ -84,7 +84,11 @@ function App() {
                   <Link className={'link'} to="/cart">Cart</Link>
               </Nav>
               {/* <Nav className='ms-auto' style={{color : '#fff'}}>{ result.isLoading ? '로딩중' : result.data.name }</Nav> */}
-              <Nav className='ms-auto' style={{color : '#fff'}}>{ result.isLoading ? '로딩중' : result.data.name }</Nav>
+              <Nav className='ms-auto' style={{color : '#fff'}}>
+                { result.isLoading && '로딩중'}
+                { result.error && '에러남' }
+                { result.data && result.data.name }
+              </Nav>
           </Container>
       </Navbar>
 
@@ -211,13 +215,19 @@ function App() {
 
           {/* 디테일 */}
           <Route path="/detail/:id" element={ 
-            <Context1.Provider value={{ 재고 }}>
-              <Detail shoes={shoes} />
-            </Context1.Provider>
+            <Suspense fallback={<div>로딩중임</div>}>
+              <Context1.Provider value={{ 재고 }}>
+                <Detail shoes={shoes} />
+              </Context1.Provider>
+            </Suspense>
           } />
 
           {/* 장바구니 카트 */}
-          <Route path='/cart' element={ <Cart /> } />
+          <Route path='/cart' element={ 
+             <Suspense fallback={<div>로딩중임</div>}>
+              <Cart /> 
+            </Suspense> 
+          } />
 
           <Route path='about' element={<About />}> 
             <Route path='member' element={<div>멤버임</div>} /> 

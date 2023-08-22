@@ -10,8 +10,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store'
 // 리액트쿼리
-import { QueryClient } from 'react-query'
-import { QueryClientProvider } from '@tanstack/react-query';
+
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 // 리액트쿼리추가
 const queryClient = new QueryClient()

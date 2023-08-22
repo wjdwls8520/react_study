@@ -29,7 +29,6 @@ let YellowBtn = styled.button`
 
 function Detail(props) {
 
-
     let { id } = useParams();
     let itemFind = props.shoes.find((x) => x.id == id );
 
