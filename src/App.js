@@ -10,6 +10,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import { useNavigate, Outlet } from 'react-router-dom' //Hook (유용한것들이 들어있는 함수라고 보면 됨)
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import Ut from './component/Usetransition';
 
 // import Detail from './routes/detail';
 // import Cart from './routes/Cart';
@@ -70,7 +71,6 @@ function App() {
 
   return (
     <>
-    
       {/* 네비게이션 헤더 */}
       <Navbar bg="dark" variant="dark">
           <Container>
@@ -240,6 +240,9 @@ function App() {
           <Route path='/event' element={<Event navigate={navigate} />}>
               <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>} />
               <Route path='two' element={<div>생일기념 쿠폰받기</div>} />
+              <Route path='three' element={
+                  <Ut /> //과부화 줄여주는 유스트랜스 유스디프런밸류
+              } />
           </Route>
 
 
@@ -268,6 +271,7 @@ function Event(props) {
       <h4>오늘의 이벤트</h4>
       <button onClick={()=> props.navigate('/event/one')}>서비스</button>
       <button onClick={()=> props.navigate('/event/two')}>쿠폰</button>
+      <button onClick={()=> props.navigate('/event/three')}>useTransition</button>
       <Outlet></Outlet>
     </div>
   );
